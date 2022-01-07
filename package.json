@@ -1,7 +1,7 @@
 {
   "name": "collapsible-react-component",
-  "version": "1.0.0",
-  "description": "Collapses and expands content with animation.",
+  "version": "0.0.1",
+  "description": "Collapses and expands content with an animation.",
   "author": "FilipChalupa",
   "license": "MIT",
   "repository": "FilipChalupa/collapsible-react-component",

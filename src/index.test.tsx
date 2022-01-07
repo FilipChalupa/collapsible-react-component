@@ -1,7 +1,7 @@
-import { ExampleComponent } from '.'
+import { Collapsible } from '.'
 
-describe('ExampleComponent', () => {
+describe('Collapsible', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(Collapsible).toBeTruthy()
   })
 })

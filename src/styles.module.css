@@ -1,9 +1,52 @@
-/* add css module styles here (optional) */
+.wrapper {
+  --Collapsible-transition-duration: 0.3s;
+  --Collapsible-transition-timing-function: ease;
+  --Collapsible-content-height: auto;
 
-.test {
-  margin: 2em;
-  padding: 0.5em;
-  border: 2px solid #000;
-  font-size: 2em;
-  text-align: center;
+  display: flex;
+  transition-property: height, opacity, visibility;
+  transition-timing-function: var(--Collapsible-transition-timing-function);
+  transition-duration: var(--Collapsible-transition-duration);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper {
+    /* 1ms is expected to be 1 frame / instant */
+    --Collapsible-transition-duration: 1ms;
+    --Collapsible-transition-timing-function: step-end;
+  }
+}
+
+.is_type_revealTopFirst {
+  align-items: flex-start;
+}
+
+.is_type_revealBottomFirst {
+  align-items: flex-end;
+}
+
+.is_state_close,
+.is_state_before-open-transition,
+.is_state_close-transition {
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+}
+
+.is_state_open-transition {
+  overflow: hidden;
+  height: var(--Collapsible-content-height);
+}
+
+.is_state_open {
+  height: auto;
+}
+
+.is_state_before-close-transition {
+  height: var(--Collapsible-content-height);
+}
+
+.content {
+  width: 100%;
 }
