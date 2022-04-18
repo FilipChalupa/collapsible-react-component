@@ -6,6 +6,8 @@
 
 ![screencast](https://raw.githubusercontent.com/FilipChalupa/collapsible-react-component/HEAD/screencast.gif)
 
+Try [interactive demo](https://codesandbox.io/s/collapsible-react-component-example-8t6c3b?file=/src/App.js).
+
 ## Install
 
 ```bash
