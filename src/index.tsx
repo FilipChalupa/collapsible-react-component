@@ -7,6 +7,7 @@ import { forceReflow } from './utils/forceReflow'
 export type CollapsibleProps = {
   open: boolean
   type?: 'revealTopFirst' | 'revealBottomFirst'
+  children?: React.ReactNode
 }
 
 type CollapsibleState =
