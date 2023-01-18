@@ -11,7 +11,7 @@ Try [interactive demo](https://codesandbox.io/s/collapsible-react-component-exam
 ## Install
 
 ```bash
-npm install --save collapsible-react-component
+npm install collapsible-react-component
 ```
 
 ## Usage
