@@ -7,23 +7,27 @@ import { forceReflow } from './utils/forceReflow'
 export type CollapsibleProps = {
   open: boolean
   type?: 'revealTopFirst' | 'revealBottomFirst'
+  onTransitionEnd?: (
+    newState: Extract<CollapsibleState, 'open' | 'closed'>
+  ) => void
   children?: React.ReactNode
 }
 
 type CollapsibleState =
-  | 'close'
+  | 'closed'
   | 'before-open-transition'
   | 'open-transition'
   | 'open'
-  | 'before-close-transition'
-  | 'close-transition'
+  | 'before-closed-transition'
+  | 'closed-transition'
 
 export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
   children,
   open,
+  onTransitionEnd,
   type = 'revealBottomFirst'
 }) => {
-  const [state, setState] = useState<CollapsibleState>(open ? 'open' : 'close')
+  const [state, setState] = useState<CollapsibleState>(open ? 'open' : 'closed')
   const [contentHeight, setContentHeight] = useState('auto')
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -37,17 +41,21 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
     setContentHeight(contentHeight)
   }, [])
 
-  const onTransitionEnd = useCallback(
+  const handleTransitionEnd = useCallback(
     (event: React.TransitionEvent) => {
       if (event.propertyName === 'visibility') {
-        setState(open ? 'open' : 'close')
+        const newState = open ? 'open' : 'closed'
+        setState(newState)
+        if (onTransitionEnd) {
+          onTransitionEnd(newState)
+        }
       }
     },
-    [open]
+    [open, onTransitionEnd]
   )
 
   useEffect(() => {
-    if (state === 'close') {
+    if (state === 'closed') {
       if (open) {
         updateContentHeight()
         setState('before-open-transition')
@@ -59,19 +67,19 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
       }
     } else if (state === 'open-transition') {
       if (!open) {
-        setState('close')
+        setState('closed')
       }
     } else if (state === 'open') {
       if (!open) {
         updateContentHeight()
-        setState('before-close-transition')
+        setState('before-closed-transition')
       }
-    } else if (state === 'before-close-transition') {
+    } else if (state === 'before-closed-transition') {
       if (!open) {
         forceReflow(contentRef.current)
-        setState('close-transition')
+        setState('closed-transition')
       }
-    } else if (state === 'close-transition') {
+    } else if (state === 'closed-transition') {
       if (open) {
         setState('open')
       }
@@ -90,7 +98,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
           '--Collapsible-content-height': contentHeight
         } as React.CSSProperties // Custom properties not supported workaround
       }
-      onTransitionEnd={onTransitionEnd}
+      onTransitionEnd={handleTransitionEnd}
       aria-hidden={!open}
     >
       <div className={style.content} ref={contentRef}>

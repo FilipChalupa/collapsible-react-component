@@ -25,9 +25,9 @@
   align-items: flex-end;
 }
 
-.is_state_close,
+.is_state_closed,
 .is_state_before-open-transition,
-.is_state_close-transition {
+.is_state_closed-transition {
   overflow: hidden;
   visibility: hidden;
   opacity: 0;
@@ -43,7 +43,7 @@
   height: auto;
 }
 
-.is_state_before-close-transition {
+.is_state_before-closed-transition {
   height: var(--Collapsible-content-height);
 }
 

@@ -45,3 +45,20 @@ const Example = () => {
   )
 }
 ```
+
+## Development
+
+Run
+
+```sh
+npm ci
+npm run dev
+```
+
+and
+
+```sh
+cd example
+npm ci
+npm run dev
+```

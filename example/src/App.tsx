@@ -16,7 +16,13 @@ const App = () => {
       >
         {open ? 'Close' : 'Open'}
       </button>
-      <Collapsible open={open}>
+      <Collapsible
+        open={open}
+        onTransitionEnd={(newState) => {
+          console.log('Collapsible box is now', newState)
+        }}
+        type='revealBottomFirst'
+      >
         <h2>Collapsible content</h2>
         <p>
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odio, sed
