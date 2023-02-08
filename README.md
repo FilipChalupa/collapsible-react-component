@@ -35,7 +35,13 @@ const Example = () => {
       >
         {open ? 'Close' : 'Open'}
       </button>
-      <Collapsible open={open}>
+      <Collapsible
+        open={open}
+        onTransitionEnd={(newState) => {
+          console.log('Collapsible box is now', newState)
+        }}
+        type='revealBottomFirst'
+      >
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odio, sed
         labore? Autem laboriosam minima corrupti rem repellat odio reiciendis
         nihil! Eum natus dolorem atque blanditiis ipsam aperiam. Voluptatem,
@@ -45,6 +51,15 @@ const Example = () => {
   )
 }
 ```
+
+### Props
+
+| Name              | Required | Default                                 | Description                                               |
+| ----------------- | -------- | --------------------------------------- | --------------------------------------------------------- |
+| `open`            | ✅       | `false`                                 | Determines wheter the children content should be visible. |
+| `children`        | ✅       | none                                    | Collapsible content.                                      |
+| `onTransitionEnd` |          | noop                                    | Callback after content is fully expanded or fully closed. |
+| `type`            |          | `revealBottomFirst` or `revealTopFirst` | Type of transition animation.                             |
 
 ## Development
 
