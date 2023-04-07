@@ -37,10 +37,13 @@ const Example = () => {
       </button>
       <Collapsible
         open={open}
-        onTransitionEnd={(newState) => {
-          console.log('Collapsible box is now', newState)
+        onTransitionStart={(open) => {
+          console.log('Collapsible box used to be', open ? 'open' : 'closed')
         }}
-        type='revealBottomFirst'
+        onTransitionEnd={(open) => {
+          console.log('Collapsible box is now', open ? 'open' : 'closed')
+        }}
+        revealType='bottomFirst'
       >
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odio, sed
         labore? Autem laboriosam minima corrupti rem repellat odio reiciendis
@@ -54,12 +57,13 @@ const Example = () => {
 
 ### Props
 
-| Name              | Required | Default       | Type                      | Description                                               |
-| ----------------- | -------- | ------------- | ------------------------- | --------------------------------------------------------- |
-| `open`            | ✅       | none          | `boolean`                 | Determines wheter the children content should be visible. |
-| `children`        | ✅       | none          | `ReactNode`               | Collapsible content.                                      |
-| `onTransitionEnd` |          | noop          | `(open: boolean) => void` | Callback after content is fully expanded or fully closed. |
-| `revealType`      |          | `bottomFirst` | `bottomFirst \| topFirst` | Type of transition animation.                             |
+| Name                | Required | Default       | Type                      | Description                                                                          |
+| ------------------- | -------- | ------------- | ------------------------- | ------------------------------------------------------------------------------------ |
+| `open`              | ✅       | none          | `boolean`                 | Determines wheter the children content should be visible.                            |
+| `children`          | ✅       | none          | `ReactNode`               | Collapsible content.                                                                 |
+| `onTransitionStart` |          | noop          | `(open: boolean) => void` | Callback invoked when transition starts. `open` is the starting state.               |
+| `onTransitionEnd`   |          | noop          | `(open: boolean) => void` | Callback after content is fully expanded or fully closed. `open` is the final state. |
+| `revealType`        |          | `bottomFirst` | `bottomFirst \| topFirst` | Type of transition animation.                                                        |
 
 ## Development
 

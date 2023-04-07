@@ -37,6 +37,9 @@ const App = () => {
       </button>
       <Collapsible
         open={open}
+        onTransitionStart={(open) => {
+          console.log('Collapsible box used to be', open ? 'open' : 'closed')
+        }}
         onTransitionEnd={(open) => {
           console.log('Collapsible box is now', open ? 'open' : 'closed')
         }}

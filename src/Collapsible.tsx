@@ -6,6 +6,7 @@ import styles from './styles.module.css'
 export type CollapsibleProps = {
   open: boolean
   revealType?: RevealType
+  onTransitionStart?: (open: boolean) => void
   onTransitionEnd?: (open: boolean) => void
   children?: React.ReactNode
 }
@@ -14,12 +15,16 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
   children,
   open,
   onTransitionEnd,
+  onTransitionStart,
   revealType = 'bottomFirst'
 }) => {
   const [isTransitioning, setIsTransitioning] = React.useState(false)
 
   React.useLayoutEffect(() => {
     return () => {
+      if (onTransitionStart) {
+        onTransitionStart(open)
+      }
       setIsTransitioning(true)
     }
   }, [open])
