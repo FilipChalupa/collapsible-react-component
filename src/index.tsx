@@ -4,9 +4,11 @@ import style from './styles.module.css'
 import { assertNever } from './utils/assertNever'
 import { forceReflow } from './utils/forceReflow'
 
+export type Type = 'revealTopFirst' | 'revealBottomFirst'
+
 export type CollapsibleProps = {
   open: boolean
-  type?: 'revealTopFirst' | 'revealBottomFirst'
+  type?: Type
   onTransitionEnd?: (
     newState: Extract<CollapsibleState, 'open' | 'closed'>
   ) => void

@@ -1,9 +1,12 @@
-import { Collapsible } from 'collapsible-react-component'
+import { Collapsible, Type } from 'collapsible-react-component'
 import 'collapsible-react-component/dist/index.css'
 import React from 'react'
 
+const types = ['revealBottomFirst', 'revealTopFirst'] as const
+
 const App = () => {
   const [open, setOpen] = React.useState(true)
+  const [type, setType] = React.useState<Type>(types[0])
 
   return (
     <>
@@ -16,12 +19,25 @@ const App = () => {
       >
         {open ? 'Close' : 'Open'}
       </button>
+      <div>
+        <select
+          onChange={(event) => {
+            setType(event.target.value as Type)
+          }}
+        >
+          {types.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
+      </div>
       <Collapsible
         open={open}
         onTransitionEnd={(newState) => {
           console.log('Collapsible box is now', newState)
         }}
-        type='revealBottomFirst'
+        type={type}
       >
         <h2>Collapsible content</h2>
         <p>
