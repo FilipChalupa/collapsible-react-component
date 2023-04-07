@@ -14,7 +14,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
   children,
   open,
   onTransitionEnd,
-  revealType = 'bottomFirst' // @TODO
+  revealType = 'bottomFirst'
 }) => {
   console.log(onTransitionEnd) // @TODO
 
@@ -25,7 +25,9 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
       } ${styles[`is_revealType_${revealType}`]}`}
       aria-hidden={!open}
     >
-      <div className={styles.content}>{children}</div>
+      <div className={styles.in}>
+        <div className={styles.content}>{children}</div>
+      </div>
     </div>
   )
 }

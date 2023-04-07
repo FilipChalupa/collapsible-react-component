@@ -13,6 +13,20 @@
   grid-template-rows: 1fr;
 }
 
-.content {
+.is_revealType_bottomFirst .in {
+  align-items: flex-end;
+}
+
+.is_revealType_topFirst .in {
+  align-items: flex-start;
+}
+
+.in {
+  display: flex;
   overflow: hidden; /* @TODO: while transitioning only */
+  align-items: flex-end;
+}
+
+.content {
+  width: 100%;
 }
