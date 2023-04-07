@@ -1,16 +1,32 @@
-import { Collapsible, Type } from 'collapsible-react-component'
+import { Collapsible, RevealType } from 'collapsible-react-component'
 import 'collapsible-react-component/dist/index.css'
 import React from 'react'
 
-const types = ['revealBottomFirst', 'revealTopFirst'] as const
+const revealTypes = ['bottomFirst', 'topFirst'] as const
 
 const App = () => {
   const [open, setOpen] = React.useState(true)
-  const [type, setType] = React.useState<Type>(types[0])
+  const [revealType, setRevealType] = React.useState<RevealType>(revealTypes[0])
 
   return (
     <>
       <h1>Collapsible react component</h1>
+      <div>
+        <label>
+          <code>revealType</code>:{' '}
+          <select
+            onChange={(event) => {
+              setRevealType(event.target.value as RevealType)
+            }}
+          >
+            {revealTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
       <button
         type='button'
         onClick={() => {
@@ -19,25 +35,12 @@ const App = () => {
       >
         {open ? 'Close' : 'Open'}
       </button>
-      <div>
-        <select
-          onChange={(event) => {
-            setType(event.target.value as Type)
-          }}
-        >
-          {types.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
-        </select>
-      </div>
       <Collapsible
         open={open}
         onTransitionEnd={(newState) => {
           console.log('Collapsible box is now', newState)
         }}
-        type={type}
+        revealType={revealType}
       >
         <h2>Collapsible content</h2>
         <p>

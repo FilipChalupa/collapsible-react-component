@@ -17,11 +17,11 @@
   }
 }
 
-.is_type_revealTopFirst {
+.is_revealType_topFirst {
   align-items: flex-start;
 }
 
-.is_type_revealBottomFirst {
+.is_revealType_bottomFirst {
   align-items: flex-end;
 }
 
