@@ -16,14 +16,45 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
   onTransitionEnd,
   revealType = 'bottomFirst'
 }) => {
-  console.log(onTransitionEnd) // @TODO
+  const [isTransitioning, setIsTransitioning] = React.useState(false)
+
+  React.useLayoutEffect(() => {
+    return () => {
+      setIsTransitioning(true)
+    }
+  }, [open])
+
+  const handleTransitionEnd = React.useCallback(
+    (event: React.TransitionEvent) => {
+      if (event.propertyName === 'grid-template-rows') {
+        if (onTransitionEnd) {
+          onTransitionEnd(open)
+        }
+        setIsTransitioning(false)
+      }
+    },
+    [open, onTransitionEnd]
+  )
+
+  const className = React.useMemo(() => {
+    const classNames: string[] = [
+      styles.wrapper,
+      open ? styles.is_state_open : styles.is_state_closed,
+      styles[`is_revealType_${revealType}`]
+    ]
+
+    if (isTransitioning) {
+      classNames.push(styles.is_transitioning)
+    }
+
+    return classNames.join(' ')
+  }, [isTransitioning, open])
 
   return (
     <div
-      className={`${styles.wrapper} ${
-        open ? styles.is_state_open : styles.is_state_closed
-      } ${styles[`is_revealType_${revealType}`]}`}
+      className={className}
       aria-hidden={!open}
+      onTransitionEnd={handleTransitionEnd}
     >
       <div className={styles.in}>
         <div className={styles.content}>{children}</div>

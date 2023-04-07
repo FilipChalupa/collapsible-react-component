@@ -21,9 +21,13 @@
   align-items: flex-start;
 }
 
+.is_transitioning .in,
+.is_state_closed .in {
+  overflow: hidden;
+}
+
 .in {
   display: flex;
-  overflow: hidden; /* @TODO: while transitioning only */
   align-items: flex-end;
 }
 
