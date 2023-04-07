@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+// eslint-disable-next-line no-unused-vars
 import type { RevealType } from './RevealType'
 import style from './styles.module.css'
 import { assertNever } from './utils/assertNever'
