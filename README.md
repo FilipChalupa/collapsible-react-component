@@ -54,12 +54,12 @@ const Example = () => {
 
 ### Props
 
-| Name              | Required | Default                     | Description                                               |
-| ----------------- | -------- | --------------------------- | --------------------------------------------------------- |
-| `open`            | ✅       | `false`                     | Determines wheter the children content should be visible. |
-| `children`        | ✅       | none                        | Collapsible content.                                      |
-| `onTransitionEnd` |          | noop                        | Callback after content is fully expanded or fully closed. |
-| `revealType`      |          | `bottomFirst` or `topFirst` | Type of transition animation.                             |
+| Name              | Required | Default       | Type                                     | Description                                               |
+| ----------------- | -------- | ------------- | ---------------------------------------- | --------------------------------------------------------- |
+| `open`            | ✅       | none          | `boolean`                                | Determines wheter the children content should be visible. |
+| `children`        | ✅       | none          | `ReactNode`                              | Collapsible content.                                      |
+| `onTransitionEnd` |          | noop          | `(newState: 'open' \| 'closed') => void` | Callback after content is fully expanded or fully closed. |
+| `revealType`      |          | `bottomFirst` | `bottomFirst \| topFirst`                | Type of transition animation.                             |
 
 ## Development
 
