@@ -3,6 +3,9 @@
   "homepage": ".",
   "version": "0.0.0",
   "private": true,
+  "engine": {
+    "node": "16"
+  },
   "scripts": {
     "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
     "dev": "npm start",
