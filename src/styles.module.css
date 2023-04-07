@@ -1,52 +1,18 @@
 .wrapper {
-  --Collapsible-transition-duration: 0.3s;
-  --Collapsible-transition-timing-function: ease;
-  --Collapsible-content-height: auto;
-
-  display: flex;
-  transition-property: height, opacity, visibility;
-  transition-timing-function: var(--Collapsible-transition-timing-function);
-  transition-duration: var(--Collapsible-transition-duration);
+  display: grid;
+  transition-property: grid-template-rows, visibility;
+  transition-duration: 0.3s;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .wrapper {
-    /* 1ms is expected to be 1 frame / instant */
-    --Collapsible-transition-duration: 1ms;
-    --Collapsible-transition-timing-function: step-end;
-  }
-}
-
-.is_revealType_topFirst {
-  align-items: flex-start;
-}
-
-.is_revealType_bottomFirst {
-  align-items: flex-end;
-}
-
-.is_state_closed,
-.is_state_before-open-transition,
-.is_state_closed-transition {
-  overflow: hidden;
+.is_state_closed {
+  grid-template-rows: 0fr;
   visibility: hidden;
-  opacity: 0;
-  height: 0;
-}
-
-.is_state_open-transition {
-  overflow: hidden;
-  height: var(--Collapsible-content-height);
 }
 
 .is_state_open {
-  height: auto;
-}
-
-.is_state_before-closed-transition {
-  height: var(--Collapsible-content-height);
+  grid-template-rows: 1fr;
 }
 
 .content {
-  width: 100%;
+  overflow: hidden; /* @TODO: while transitioning only */
 }
