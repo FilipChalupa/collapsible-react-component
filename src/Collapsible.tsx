@@ -2,6 +2,7 @@ import * as React from 'react'
 // eslint-disable-next-line no-unused-vars
 import type { RevealType } from './RevealType'
 import styles from './styles.module.css'
+import { useIsomorphicLayoutEffect } from './utilities/useIsomorphicLayoutEffect'
 
 export type CollapsibleProps = {
   open: boolean
@@ -20,7 +21,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 }) => {
   const [isTransitioning, setIsTransitioning] = React.useState(false)
 
-  React.useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     return () => {
       if (onTransitionStart) {
         onTransitionStart(open)
