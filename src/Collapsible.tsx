@@ -23,9 +23,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 
   useIsomorphicLayoutEffect(() => {
     return () => {
-      if (onTransitionStart) {
-        onTransitionStart(open)
-      }
+      onTransitionStart?.(open)
       setIsTransitioning(true)
     }
   }, [open])
@@ -33,9 +31,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
   const handleTransitionEnd = React.useCallback(
     (event: React.TransitionEvent) => {
       if (event.propertyName === 'grid-template-rows') {
-        if (onTransitionEnd) {
-          onTransitionEnd(open)
-        }
+        onTransitionEnd?.(open)
         setIsTransitioning(false)
       }
     },
