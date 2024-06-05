@@ -1,8 +1,8 @@
 import * as React from 'react'
-// eslint-disable-next-line no-unused-vars
 import type { RevealType } from './RevealType'
 import styles from './styles.module.css'
-import { useIsomorphicLayoutEffect } from './utilities/useIsomorphicLayoutEffect'
+
+const transitioningProperty = 'grid-template-rows'
 
 export type CollapsibleProps = {
   open: boolean
@@ -19,19 +19,29 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
   onTransitionStart,
   revealType = 'bottomFirst'
 }) => {
+  const wrapperRef = React.useRef<HTMLDivElement>(null)
   const [isTransitioning, setIsTransitioning] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(open)
+  const isOpenRef = React.useRef(open)
 
-  useIsomorphicLayoutEffect(() => {
-    return () => {
-      onTransitionStart?.(open)
-      setIsTransitioning(true)
+  React.useEffect(() => {
+    if (isOpenRef.current === open) {
+      return
     }
-  }, [open])
+    isOpenRef.current = open
+    onTransitionStart?.(open)
+    setIsOpen(open)
+    setIsTransitioning(true)
+  }, [onTransitionStart, open])
 
   const handleTransitionEnd = React.useCallback(
     (event: React.TransitionEvent) => {
-      if (event.propertyName === 'grid-template-rows') {
+      if (
+        event.propertyName === transitioningProperty &&
+        event.target === wrapperRef.current
+      ) {
         onTransitionEnd?.(open)
+        setIsOpen(open)
         setIsTransitioning(false)
       }
     },
@@ -41,7 +51,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
   const className = React.useMemo(() => {
     const classNames: string[] = [
       styles.wrapper,
-      open ? styles.is_state_open : styles.is_state_closed,
+      isOpen ? styles.is_state_open : styles.is_state_closed,
       styles[`is_revealType_${revealType}`]
     ]
 
@@ -50,10 +60,11 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
     }
 
     return classNames.join(' ')
-  }, [isTransitioning, open, revealType])
+  }, [isTransitioning, isOpen, revealType])
 
   return (
     <div
+      ref={wrapperRef}
       className={className}
       aria-hidden={!open}
       onTransitionEnd={handleTransitionEnd}
