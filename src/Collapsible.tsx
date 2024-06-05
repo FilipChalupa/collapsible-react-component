@@ -54,7 +54,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
     }
 
     return classNames.join(' ')
-  }, [isTransitioning, open])
+  }, [isTransitioning, open, revealType])
 
   return (
     <div
