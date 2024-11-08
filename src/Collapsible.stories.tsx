@@ -59,6 +59,7 @@ const Render: FunctionComponent = () => {
 					console.log('Collapsible box is now', open ? 'open' : 'closed')
 				}}
 				revealType={revealType}
+				alwaysKeepChildrenMounted
 			>
 				<h2>Collapsible content</h2>
 				<p>

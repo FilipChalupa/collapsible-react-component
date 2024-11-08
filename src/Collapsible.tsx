@@ -18,6 +18,7 @@ export type CollapsibleProps = {
 	onTransitionStart?: (open: boolean) => void
 	onTransitionEnd?: (open: boolean) => void
 	children?: ReactNode
+	alwaysKeepChildrenMounted?: boolean
 }
 
 export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
@@ -26,6 +27,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 	onTransitionEnd,
 	onTransitionStart,
 	revealType = 'bottomFirst',
+	alwaysKeepChildrenMounted = false,
 }) => {
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const [state, setState] = useState({ isOpen: open, isTransitioning: false })
@@ -76,7 +78,10 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 		>
 			<div className={styles.in}>
 				<div className={styles.content}>
-					{(state.isOpen || state.isTransitioning) && children}
+					{(state.isOpen ||
+						state.isTransitioning ||
+						alwaysKeepChildrenMounted) &&
+						children}
 				</div>
 			</div>
 		</div>
