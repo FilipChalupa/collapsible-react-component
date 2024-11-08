@@ -8,7 +8,7 @@ import {
 	useState,
 } from 'react'
 import styles from './Collapsible.module.css'
-import type { RevealType } from './revealTypes'
+import { RevealType, revealTypes } from './revealTypes'
 
 const transitioningProperty = 'grid-template-rows'
 
@@ -26,7 +26,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 	open,
 	onTransitionEnd,
 	onTransitionStart,
-	revealType = 'bottomFirst',
+	revealType = revealTypes[0],
 	alwaysKeepChildrenMounted = false,
 }) => {
 	const wrapperRef = useRef<HTMLDivElement>(null)
