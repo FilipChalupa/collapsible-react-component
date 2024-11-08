@@ -75,7 +75,9 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 			onTransitionEnd={handleTransitionEnd}
 		>
 			<div className={styles.in}>
-				<div className={styles.content}>{children}</div>
+				<div className={styles.content}>
+					{(state.isOpen || state.isTransitioning) && children}
+				</div>
 			</div>
 		</div>
 	)
