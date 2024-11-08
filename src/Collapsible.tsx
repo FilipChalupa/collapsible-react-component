@@ -28,8 +28,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 	revealType = 'bottomFirst',
 }) => {
 	const wrapperRef = useRef<HTMLDivElement>(null)
-	const [isTransitioning, setIsTransitioning] = useState(false)
-	const [isOpen, setIsOpen] = useState(open)
+	const [state, setState] = useState({ isOpen: open, isTransitioning: false })
 	const isOpenRef = useRef(open)
 
 	useEffect(() => {
@@ -38,8 +37,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 		}
 		isOpenRef.current = open
 		onTransitionStart?.(open)
-		setIsOpen(open)
-		setIsTransitioning(true)
+		setState({ isOpen: open, isTransitioning: true })
 	}, [onTransitionStart, open])
 
 	const handleTransitionEnd = useCallback(
@@ -49,8 +47,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 				event.target === wrapperRef.current
 			) {
 				onTransitionEnd?.(open)
-				setIsOpen(open)
-				setIsTransitioning(false)
+				setState({ isOpen: open, isTransitioning: false })
 			}
 		},
 		[open, onTransitionEnd],
@@ -59,22 +56,22 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 	const className = useMemo(() => {
 		const classNames: string[] = [
 			styles.wrapper,
-			isOpen ? styles.is_state_open : styles.is_state_closed,
+			state.isOpen ? styles.is_state_open : styles.is_state_closed,
 			styles[`is_revealType_${revealType}`],
 		]
 
-		if (isTransitioning) {
+		if (state.isTransitioning) {
 			classNames.push(styles.is_transitioning)
 		}
 
 		return classNames.join(' ')
-	}, [isTransitioning, isOpen, revealType])
+	}, [state, revealType])
 
 	return (
 		<div
 			ref={wrapperRef}
 			className={className}
-			aria-hidden={!open}
+			aria-hidden={!state.isOpen}
 			onTransitionEnd={handleTransitionEnd}
 		>
 			<div className={styles.in}>
