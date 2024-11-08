@@ -1,4 +1,12 @@
-import * as React from 'react'
+import {
+	ReactNode,
+	TransitionEvent,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react'
 import styles from './Collapsible.module.css'
 import type { RevealType } from './revealTypes'
 
@@ -9,7 +17,7 @@ export type CollapsibleProps = {
 	revealType?: RevealType
 	onTransitionStart?: (open: boolean) => void
 	onTransitionEnd?: (open: boolean) => void
-	children?: React.ReactNode
+	children?: ReactNode
 }
 
 export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
@@ -19,12 +27,12 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 	onTransitionStart,
 	revealType = 'bottomFirst',
 }) => {
-	const wrapperRef = React.useRef<HTMLDivElement>(null)
-	const [isTransitioning, setIsTransitioning] = React.useState(false)
-	const [isOpen, setIsOpen] = React.useState(open)
-	const isOpenRef = React.useRef(open)
+	const wrapperRef = useRef<HTMLDivElement>(null)
+	const [isTransitioning, setIsTransitioning] = useState(false)
+	const [isOpen, setIsOpen] = useState(open)
+	const isOpenRef = useRef(open)
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (isOpenRef.current === open) {
 			return
 		}
@@ -34,8 +42,8 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 		setIsTransitioning(true)
 	}, [onTransitionStart, open])
 
-	const handleTransitionEnd = React.useCallback(
-		(event: React.TransitionEvent) => {
+	const handleTransitionEnd = useCallback(
+		(event: TransitionEvent) => {
 			if (
 				event.propertyName === transitioningProperty &&
 				event.target === wrapperRef.current
@@ -48,7 +56,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 		[open, onTransitionEnd],
 	)
 
-	const className = React.useMemo(() => {
+	const className = useMemo(() => {
 		const classNames: string[] = [
 			styles.wrapper,
 			isOpen ? styles.is_state_open : styles.is_state_closed,

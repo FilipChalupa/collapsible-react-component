@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { FunctionComponent, useState } from 'react'
+import { type FunctionComponent, useState } from 'react'
 import { Collapsible } from './Collapsible'
 import './Collapsible.stories.css'
 import { RevealType, revealTypes } from './revealTypes'
