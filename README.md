@@ -6,8 +6,6 @@
 
 ![screencast](https://raw.githubusercontent.com/FilipChalupa/collapsible-react-component/HEAD/screencast.gif)
 
-Try [interactive demo](https://codesandbox.io/s/collapsible-react-component-example-8t6c3b?file=/src/App.js).
-
 ## Install
 
 ```bash
@@ -16,14 +14,15 @@ npm install collapsible-react-component
 
 ## Usage
 
-```tsx
-import React from 'react'
+Try [CodeSandbox interactive demo](https://codesandbox.io/s/collapsible-react-component-example-8t6c3b?file=/src/App.js) or see [Storybook examples](https://filipchalupa.cz/collapsible-react-component/).
 
+```tsx
+import { useState } from 'react'
 import { Collapsible } from 'collapsible-react-component'
 import 'collapsible-react-component/dist/index.css'
 
 const Example = () => {
-	const [open, setOpen] = React.useState(true)
+	const [open, setOpen] = useState(true)
 
 	return (
 		<>
