@@ -1,5 +1,11 @@
 import { useArgs } from '@storybook/preview-api'
 import type { Meta, StoryObj } from '@storybook/react'
+import {
+	QueryClient,
+	QueryClientProvider,
+	useSuspenseQuery,
+} from '@tanstack/react-query'
+import { FunctionComponent, Suspense, useDeferredValue } from 'react'
 import { Collapsible } from './Collapsible'
 import './Collapsible.stories.css'
 import { revealTypes } from './revealTypes'
@@ -67,4 +73,83 @@ export const Main: Story = {
 			</div>
 		)
 	},
+}
+
+const queryClient = new QueryClient()
+const counterQueryKey = ['counter']
+const forgetData = () => {
+	queryClient.removeQueries({
+		queryKey: counterQueryKey,
+	})
+}
+
+export const SuspenseStory: Story = {
+	args: {
+		open: false,
+	},
+	decorators: [
+		(Story) => <Suspense fallback="Loading data">{Story()}</Suspense>,
+	],
+	render: ({ revealType, open }) => {
+		const [, updateArgs] = useArgs()
+
+		const openDeferred = useDeferredValue(open)
+		const loading = openDeferred !== open
+
+		return (
+			<QueryClientProvider client={queryClient}>
+				<div className="wrapper">
+					<h1>Collapsible react component</h1>
+					<button
+						type="button"
+						onClick={() => {
+							updateArgs({ open: !open })
+						}}
+						disabled={loading}
+					>
+						{openDeferred ? 'Close' : 'Open'}
+					</button>
+					<Collapsible
+						open={openDeferred}
+						revealType={revealType}
+						onTransitionEnd={(open) => {
+							if (!open) {
+								forgetData()
+							}
+						}}
+					>
+						<DelayedContent />
+					</Collapsible>
+				</div>
+			</QueryClientProvider>
+		)
+	},
+}
+SuspenseStory.storyName = 'Suspense'
+
+let counter = 0
+const DelayedContent: FunctionComponent = () => {
+	const content = useSuspenseQuery({
+		queryKey: counterQueryKey,
+		queryFn: async () => {
+			await new Promise((resolve) => setTimeout(resolve, 2000))
+			return ++counter
+		},
+		networkMode: 'always',
+		staleTime: Infinity,
+	})
+
+	return (
+		<div>
+			<p>
+				Open counter <output>{content.data}</output>
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae eius in
+				sed suscipit illum accusantium accusamus inventore maiores consectetur.
+				Officiis ab recusandae voluptate tempore nisi tempora repellat deleniti
+				odio officia.
+			</p>
+		</div>
+	)
 }
