@@ -13,6 +13,8 @@ export type CollapsibleProps = {
 	alwaysKeepChildrenMounted?: boolean
 }
 
+const next = (callback: () => void) => Promise.resolve().then(callback)
+
 export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 	children,
 	open,
@@ -27,7 +29,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 
 	if (lastOpenRef.current !== open) {
 		lastOpenRef.current = open
-		setTimeout(() => {
+		next(() => {
 			onTransitionStart?.(open)
 		})
 		stateRef.current = { open, transitioning: true }
@@ -39,7 +41,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 				event.propertyName === transitioningProperty &&
 				event.target === wrapperRef.current
 			) {
-				setTimeout(() => {
+				next(() => {
 					onTransitionEnd?.(open)
 				})
 				stateRef.current = { open: open, transitioning: false }
