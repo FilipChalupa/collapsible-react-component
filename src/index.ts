@@ -1,2 +1,2 @@
 export * from './Collapsible'
-export * from './RevealType'
+export * from './revealTypes'

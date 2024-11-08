@@ -1,0 +1,47 @@
+.wrapper {
+	--Collapsible-transition-duration: 0.3s;
+	--Collapsible-transition-timing-function: ease;
+	display: grid;
+	transition-property: grid-template-rows, visibility;
+	transition-timing-function: var(--Collapsible-transition-timing-function);
+	transition-duration: var(--Collapsible-transition-duration);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wrapper {
+		/* 1ms is expected to be 1 frame / instant */
+		--Collapsible-transition-duration: 1ms;
+		--Collapsible-transition-timing-function: step-end;
+	}
+}
+
+.is_state_closed {
+	grid-template-rows: 0fr;
+	visibility: hidden;
+}
+
+.is_state_open {
+	grid-template-rows: 1fr;
+}
+
+.is_revealType_bottomFirst .in {
+	align-items: flex-end;
+}
+
+.is_revealType_topFirst .in {
+	align-items: flex-start;
+}
+
+.is_transitioning .in,
+.is_state_closed .in {
+	overflow: hidden;
+}
+
+.in {
+	display: flex;
+	align-items: flex-end;
+}
+
+.content {
+	width: 100%;
+}
