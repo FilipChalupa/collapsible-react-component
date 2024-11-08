@@ -88,6 +88,9 @@ export const SuspenseStory: Story = {
 		open: false,
 	},
 	decorators: [
+		(Story) => (
+			<QueryClientProvider client={queryClient}>{Story()}</QueryClientProvider>
+		),
 		(Story) => <Suspense fallback="Loading data">{Story()}</Suspense>,
 	],
 	render: ({ revealType, open }) => {
@@ -97,31 +100,29 @@ export const SuspenseStory: Story = {
 		const loading = openDeferred !== open
 
 		return (
-			<QueryClientProvider client={queryClient}>
-				<div className="wrapper">
-					<h1>Collapsible react component</h1>
-					<button
-						type="button"
-						onClick={() => {
-							updateArgs({ open: !open })
-						}}
-						disabled={loading}
-					>
-						{openDeferred ? 'Close' : 'Open'}
-					</button>
-					<Collapsible
-						open={openDeferred}
-						revealType={revealType}
-						onTransitionEnd={(open) => {
-							if (!open) {
-								forgetData()
-							}
-						}}
-					>
-						<DelayedContent />
-					</Collapsible>
-				</div>
-			</QueryClientProvider>
+			<div className="wrapper">
+				<h1>Collapsible react component</h1>
+				<button
+					type="button"
+					onClick={() => {
+						updateArgs({ open: !open })
+					}}
+					disabled={loading}
+				>
+					{openDeferred ? 'Close' : 'Open'}
+				</button>
+				<Collapsible
+					open={openDeferred}
+					revealType={revealType}
+					onTransitionEnd={(open) => {
+						if (!open) {
+							forgetData()
+						}
+					}}
+				>
+					<DelayedContent />
+				</Collapsible>
+			</div>
 		)
 	},
 }
