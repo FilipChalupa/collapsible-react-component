@@ -1,12 +1,4 @@
-import {
-	ReactNode,
-	TransitionEvent,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react'
+import { ReactNode, TransitionEvent, useCallback, useRef } from 'react'
 import styles from './Collapsible.module.css'
 import { RevealType, revealTypes } from './revealTypes'
 
@@ -30,17 +22,16 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 	alwaysKeepChildrenMounted = false,
 }) => {
 	const wrapperRef = useRef<HTMLDivElement>(null)
-	const [state, setState] = useState({ isOpen: open, isTransitioning: false })
-	const isOpenRef = useRef(open)
+	const lastOpenRef = useRef(open)
+	const stateRef = useRef({ open, transitioning: false })
 
-	useEffect(() => {
-		if (isOpenRef.current === open) {
-			return
-		}
-		isOpenRef.current = open
-		onTransitionStart?.(open)
-		setState({ isOpen: open, isTransitioning: true })
-	}, [onTransitionStart, open])
+	if (lastOpenRef.current !== open) {
+		lastOpenRef.current = open
+		setTimeout(() => {
+			onTransitionStart?.(open)
+		})
+		stateRef.current = { open, transitioning: true }
+	}
 
 	const handleTransitionEnd = useCallback(
 		(event: TransitionEvent) => {
@@ -48,38 +39,40 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 				event.propertyName === transitioningProperty &&
 				event.target === wrapperRef.current
 			) {
-				onTransitionEnd?.(open)
-				setState({ isOpen: open, isTransitioning: false })
+				setTimeout(() => {
+					onTransitionEnd?.(open)
+				})
+				stateRef.current = { open: open, transitioning: false }
 			}
 		},
 		[open, onTransitionEnd],
 	)
 
-	const className = useMemo(() => {
+	const className = (() => {
 		const classNames: string[] = [
 			styles.wrapper,
-			state.isOpen ? styles.is_state_open : styles.is_state_closed,
+			stateRef.current.open ? styles.is_state_open : styles.is_state_closed,
 			styles[`is_revealType_${revealType}`],
 		]
 
-		if (state.isTransitioning) {
+		if (stateRef.current.transitioning) {
 			classNames.push(styles.is_transitioning)
 		}
 
 		return classNames.join(' ')
-	}, [state, revealType])
+	})()
 
 	return (
 		<div
 			ref={wrapperRef}
 			className={className}
-			aria-hidden={!state.isOpen}
+			aria-hidden={!stateRef.current.open}
 			onTransitionEnd={handleTransitionEnd}
 		>
 			<div className={styles.in}>
 				<div className={styles.content}>
-					{(state.isOpen ||
-						state.isTransitioning ||
+					{(stateRef.current.open ||
+						stateRef.current.transitioning ||
 						alwaysKeepChildrenMounted) &&
 						children}
 				</div>

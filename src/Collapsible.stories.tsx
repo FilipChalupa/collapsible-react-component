@@ -5,7 +5,12 @@ import {
 	QueryClientProvider,
 	useSuspenseQuery,
 } from '@tanstack/react-query'
-import { FunctionComponent, Suspense, useDeferredValue } from 'react'
+import {
+	FunctionComponent,
+	PropsWithChildren,
+	Suspense,
+	useDeferredValue,
+} from 'react'
 import { Collapsible } from './Collapsible'
 import './Collapsible.stories.css'
 import { revealTypes } from './revealTypes'
@@ -91,7 +96,6 @@ export const SuspenseStory: Story = {
 		(Story) => (
 			<QueryClientProvider client={queryClient}>{Story()}</QueryClientProvider>
 		),
-		(Story) => <Suspense fallback="Loading data">{Story()}</Suspense>,
 	],
 	render: ({ revealType, open }) => {
 		const [, updateArgs] = useArgs()
@@ -110,23 +114,34 @@ export const SuspenseStory: Story = {
 					disabled={loading}
 				>
 					{openDeferred ? 'Close' : 'Open'}
-				</button>
-				<Collapsible
-					open={openDeferred}
-					revealType={revealType}
-					onTransitionEnd={(open) => {
-						if (!open) {
-							forgetData()
-						}
-					}}
-				>
-					<DelayedContent />
-				</Collapsible>
+				</button>{' '}
+				{loading && 'Loading…'}
+				<div>
+					<SuspenseWrapper>
+						<Collapsible
+							open={openDeferred}
+							revealType={revealType}
+							onTransitionEnd={(open) => {
+								if (!open) {
+									forgetData()
+								}
+							}}
+						>
+							<DelayedContent />
+						</Collapsible>
+					</SuspenseWrapper>
+				</div>
 			</div>
 		)
 	},
 }
 SuspenseStory.storyName = 'Suspense'
+
+const SuspenseWrapper: FunctionComponent<PropsWithChildren> = ({
+	children,
+}) => {
+	return <Suspense fallback={<p>Loading initial data</p>}>{children}</Suspense>
+}
 
 let counter = 0
 const DelayedContent: FunctionComponent = () => {
