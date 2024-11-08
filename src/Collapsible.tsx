@@ -1,4 +1,12 @@
-import * as React from 'react'
+import {
+	ReactNode,
+	TransitionEvent,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react'
 import styles from './Collapsible.module.css'
 import type { RevealType } from './revealTypes'
 
@@ -9,7 +17,8 @@ export type CollapsibleProps = {
 	revealType?: RevealType
 	onTransitionStart?: (open: boolean) => void
 	onTransitionEnd?: (open: boolean) => void
-	children?: React.ReactNode
+	children?: ReactNode
+	alwaysKeepChildrenMounted?: boolean
 }
 
 export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
@@ -18,59 +27,62 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 	onTransitionEnd,
 	onTransitionStart,
 	revealType = 'bottomFirst',
+	alwaysKeepChildrenMounted = false,
 }) => {
-	const wrapperRef = React.useRef<HTMLDivElement>(null)
-	const [isTransitioning, setIsTransitioning] = React.useState(false)
-	const [isOpen, setIsOpen] = React.useState(open)
-	const isOpenRef = React.useRef(open)
+	const wrapperRef = useRef<HTMLDivElement>(null)
+	const [state, setState] = useState({ isOpen: open, isTransitioning: false })
+	const isOpenRef = useRef(open)
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (isOpenRef.current === open) {
 			return
 		}
 		isOpenRef.current = open
 		onTransitionStart?.(open)
-		setIsOpen(open)
-		setIsTransitioning(true)
+		setState({ isOpen: open, isTransitioning: true })
 	}, [onTransitionStart, open])
 
-	const handleTransitionEnd = React.useCallback(
-		(event: React.TransitionEvent) => {
+	const handleTransitionEnd = useCallback(
+		(event: TransitionEvent) => {
 			if (
 				event.propertyName === transitioningProperty &&
 				event.target === wrapperRef.current
 			) {
 				onTransitionEnd?.(open)
-				setIsOpen(open)
-				setIsTransitioning(false)
+				setState({ isOpen: open, isTransitioning: false })
 			}
 		},
 		[open, onTransitionEnd],
 	)
 
-	const className = React.useMemo(() => {
+	const className = useMemo(() => {
 		const classNames: string[] = [
 			styles.wrapper,
-			isOpen ? styles.is_state_open : styles.is_state_closed,
+			state.isOpen ? styles.is_state_open : styles.is_state_closed,
 			styles[`is_revealType_${revealType}`],
 		]
 
-		if (isTransitioning) {
+		if (state.isTransitioning) {
 			classNames.push(styles.is_transitioning)
 		}
 
 		return classNames.join(' ')
-	}, [isTransitioning, isOpen, revealType])
+	}, [state, revealType])
 
 	return (
 		<div
 			ref={wrapperRef}
 			className={className}
-			aria-hidden={!open}
+			aria-hidden={!state.isOpen}
 			onTransitionEnd={handleTransitionEnd}
 		>
 			<div className={styles.in}>
-				<div className={styles.content}>{children}</div>
+				<div className={styles.content}>
+					{(state.isOpen ||
+						state.isTransitioning ||
+						alwaysKeepChildrenMounted) &&
+						children}
+				</div>
 			</div>
 		</div>
 	)
