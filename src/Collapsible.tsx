@@ -1,6 +1,7 @@
 'use client'
 
 import {
+	FunctionComponent,
 	ReactNode,
 	TransitionEvent,
 	useCallback,
@@ -23,7 +24,7 @@ export type CollapsibleProps = {
 
 const next = (callback: () => void) => Promise.resolve().then(callback)
 
-export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
+export const Collapsible: FunctionComponent<CollapsibleProps> = ({
 	children,
 	open,
 	onTransitionEnd,
