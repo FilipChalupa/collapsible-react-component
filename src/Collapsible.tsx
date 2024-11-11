@@ -1,4 +1,10 @@
-import { ReactNode, TransitionEvent, useCallback, useRef } from 'react'
+import {
+	ReactNode,
+	TransitionEvent,
+	useCallback,
+	useReducer,
+	useRef,
+} from 'react'
 import styles from './Collapsible.module.css'
 import { RevealType, revealTypes } from './revealTypes'
 
@@ -26,6 +32,9 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const lastOpenRef = useRef(open)
 	const stateRef = useRef({ open, transitioning: false })
+	const [, forceRender] = useReducer((counter: number) => {
+		return counter + 1
+	}, 0)
 
 	if (lastOpenRef.current !== open) {
 		lastOpenRef.current = open
@@ -45,6 +54,7 @@ export const Collapsible: React.FunctionComponent<CollapsibleProps> = ({
 					onTransitionEnd?.(open)
 				})
 				stateRef.current = { open: open, transitioning: false }
+				forceRender()
 			}
 		},
 		[open, onTransitionEnd],
