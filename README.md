@@ -77,7 +77,5 @@ npm run dev
 and
 
 ```sh
-cd example
-npm ci
-npm run dev
+npm run storybook
 ```
