@@ -2,11 +2,11 @@
 
 import {
 	FunctionComponent,
-	ReactNode,
 	TransitionEvent,
 	useCallback,
 	useReducer,
 	useRef,
+	type PropsWithChildren,
 } from 'react'
 import styles from './Collapsible.module.css'
 import { RevealType, revealTypes } from './revealTypes'
@@ -18,13 +18,14 @@ export type CollapsibleProps = {
 	revealType?: RevealType
 	onTransitionStart?: (open: boolean) => void
 	onTransitionEnd?: (open: boolean) => void
-	children?: ReactNode
 	alwaysKeepChildrenMounted?: boolean
 }
 
 const next = (callback: () => void) => Promise.resolve().then(callback)
 
-export const Collapsible: FunctionComponent<CollapsibleProps> = ({
+export const Collapsible: FunctionComponent<
+	PropsWithChildren<CollapsibleProps>
+> = ({
 	children,
 	open,
 	onTransitionEnd,
