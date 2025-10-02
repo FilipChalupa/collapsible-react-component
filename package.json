@@ -1,6 +1,6 @@
 {
 	"name": "collapsible-react-component",
-	"version": "3.0.6",
+	"version": "3.0.7",
 	"description": "Collapses and expands content with an animation.",
 	"type": "module",
 	"main": "./dist/index.js",
